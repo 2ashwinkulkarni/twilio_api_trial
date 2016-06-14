@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once('master-login.php');
+require_once('../master-login.php');
 
 
 if (count($_POST) > 0) {
@@ -9,17 +9,16 @@ if (count($_POST) > 0) {
 	$myusername=$_POST['myusername'];
 	$mypassword=$_POST['mypassword'];
 
-	$row = user_login($myusername, $mypassword, "twilio_api_tool");
+	$count = user_login($myusername, $mypassword, "CreateAccount");
 
-
-	// If result matched $myusername and $mypassword, we will have their email
-	if(!empty($row['email'])) {
-	  $_SESSION["trackingusername"] = $myusername;
-	  header("location:index.php?uname=$myusername");
+	// If result matched $myusername and $mypassword, table row must be 1 row
+	if($count==1) {
+	  $_SESSION["createaccauth"] = $myusername;  
+	  header("location:createaccount.php");
 	} else {
-	  if($myusername) {?>
-		<center> "Wrong Username and/or Password <br> Ensure you are entering the correct Username and Password"</center>
-	 <?php }
+	  if($myusername) {
+		echo "Wrong Username or Password";
+	  }
 	}
 }
 
@@ -27,7 +26,7 @@ if (count($_POST) > 0) {
 
 <html>
   <head>
-    <title>Twilio Testing Login Page</title>
+    <title>Create Account</title>
     <link type="text/css" rel="Stylesheet" media="all" href="styles.css">
   </head>
 <body onload="document.login.myusername.focus()">
@@ -41,7 +40,7 @@ if (count($_POST) > 0) {
 
 <table border="0" cellspacing="5" cellpadding="2">
   <tr>
-    <td colspan=2><b><div class="login">Login to Twilio API Testing</div></b></td>
+    <td colspan=2><b><div class="login">Login to Create Account</div></b></td>
     <!--<td colspan=2><img src="shlogo1.png"></td>-->
   </tr>
 </table>
@@ -65,10 +64,10 @@ if (count($_POST) > 0) {
   </tr>
  <tr><td></td></tr>
   <tr>
-    <td><a href="../code/accountManagement/accountinfo.php">Forgot Password / Create Account</a></td>
+    <td><a href="../accountManagement/accountinfo.php">Forgot Password / Create Account</a></td>
   </tr>
  <tr>
-    <td><a href="../code/accountManagement/passwordreset.php">Reset Password</a></td>
+    <td><a href="../accountManagement/passwordreset.php">Reset Password</a></td>
   </tr>
 </table>
 
